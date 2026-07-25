@@ -476,9 +476,11 @@ class BlockView {
     let innerWidth = 0
     let scriptWidth = 0
     let line = new Line(y)
-    const pushLine = () => {
+    const pushLine = isLast => {
       if (lines.length === 0) {
         line.height += pt + pb
+      } else if (line.isVisualRow && isLast) {
+        line.height += pb
       } else if (!line.isVisualRow) {
         line.height -= 11
         line.y -= 2
@@ -571,7 +573,7 @@ class BlockView {
         previousChild = child
       }
     }
-    pushLine()
+    pushLine(true)
 
     let padLeft = children.length ? this.horizontalPadding(children[0]) : 0
     const padRight = children.length ? this.horizontalPadding(lastChild) : 0

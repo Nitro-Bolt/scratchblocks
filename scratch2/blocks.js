@@ -390,6 +390,8 @@ class BlockView {
     const pushLine = isLast => {
       if (lines.length === 0) {
         line.height += pt + pb
+      } else if (line.isVisualRow && isLast) {
+        line.height += pb
       } else if (!line.isVisualRow) {
         line.height += isLast ? 0 : +2
         line.y -= 1

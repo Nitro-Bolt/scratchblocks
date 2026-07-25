@@ -7,7 +7,7 @@ Some examples:
 use object {} and array []
 
 first row \n second row
-values @delInput (one) (two) @addInput
+values (one) (two) @delInput @addInput
 ```
 
 At the start of a line, `{...}` and `[...]` create object and array blocks.
