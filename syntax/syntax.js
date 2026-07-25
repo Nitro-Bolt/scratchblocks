@@ -413,10 +413,18 @@ function parseLines(code, languages) {
     const lineEnd = code.indexOf("\n", index)
     const line = code.slice(index, lineEnd === -1 ? code.length : lineEnd)
     const close = shape === "object" ? "}" : "]"
-    return (
-      line.endsWith(close) &&
-      new RegExp(`::\\s*${shape}(?:\\s+[^${close}]+)?\\s*\\${close}$`).test(line)
-    )
+    if (!line.endsWith(close)) {
+      return false
+    }
+    const overrideAt = line.lastIndexOf("::")
+    if (overrideAt === -1) {
+      return false
+    }
+    return line
+      .slice(overrideAt + 2, -1)
+      .trim()
+      .split(/\s+/)
+      .includes(shape)
   }
 
   function pWrappedBlock(shape) {

@@ -207,7 +207,7 @@ export class InputView {
       w = this.label.width + 2 * px
       label = SVG.move(px, 9, label)
     } else {
-      w = this.isInset ? 48 : null
+      w = this.isInset ? 30 : null
     }
     if (this.hasArrow) {
       w += 20

@@ -122,12 +122,10 @@ export default class SVG {
   }
 
   static objectPath(w, h) {
-    const r = Math.min(16, h / 2)
+    const r = Math.min(16, h / 2, w / 4)
     const straight = Math.max(0, h - 2 * r)
-    // Keep the outward-facing brace tips inside the SVG viewport so their
-    // stroke is not clipped at x=0 or x=w.
-    const left = 2
-    const right = w - 2
+    const left = 0
+    const right = w
     return [
       `M ${left + r} 0`,
       `H ${right - r}`,
@@ -143,7 +141,12 @@ export default class SVG {
   }
 
   static objectRect(w, h, props) {
-    return SVG.path({ ...props, path: SVG.objectPath(w, h) })
+    return SVG.path({
+      ...props,
+      "stroke-linejoin": "miter",
+      "stroke-miterlimit": 20,
+      path: SVG.objectPath(w, h),
+    })
   }
 
   static topNotch(w, y) {

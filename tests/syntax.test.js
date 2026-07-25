@@ -157,8 +157,13 @@ describe("NitroBolt block syntax", () => {
   test("object and array output shapes", () => {
     const object = parseBlock("{object value :: object}")
     const array = parseBlock("[array value :: array]")
+    const coloredArray = parseBlock("[array value :: array #4D5057]")
     expect(object.info.shape).toBe("object")
     expect(array.info.shape).toBe("array")
+    expect(coloredArray.info).toMatchObject({
+      shape: "array",
+      color: "#4D5057",
+    })
     expect(object.stringify()).toBe("{object value :: object}")
     expect(array.stringify()).toBe("[array value :: array]")
   })
