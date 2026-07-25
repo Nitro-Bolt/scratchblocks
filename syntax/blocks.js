@@ -29,9 +29,6 @@ const overrideShapes = [
   "reporter",
   "object",
   "array",
-  "reporter-block",
-  "object-block",
-  "array-block",
   "ring",
   "cat",
 ]

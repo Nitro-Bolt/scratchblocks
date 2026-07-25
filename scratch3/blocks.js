@@ -272,7 +272,11 @@ export class InputView {
           stroke: "rgba(0, 0, 0, 0.15)", // combines with fill...
         })
       }
-    } else if (this.shape === "boolean") {
+    } else if (
+      this.shape === "boolean" ||
+      this.shape === "object" ||
+      this.shape === "array"
+    ) {
       el.classList.remove(`sb3-${parent.info.category}`)
       el.classList.add(`sb3-${parent.info.category}-dark`)
 
@@ -376,9 +380,6 @@ class BlockView {
       reporter: SVG.pillRect,
       object: SVG.objectRect,
       array: SVG.rect,
-      "reporter-block": SVG.pillRect,
-      "object-block": SVG.objectRect,
-      "array-block": SVG.rect,
       boolean: SVG.pointedRect,
       hat: SVG.hatRect,
       cat: SVG.catHat,
@@ -390,21 +391,6 @@ class BlockView {
   drawSelf(iconStyle, w, h, lines) {
     // mouths
     if (lines.length > 1) {
-      if (
-        this.info.shape === "reporter-block" ||
-        this.info.shape === "object-block" ||
-        this.info.shape === "array-block"
-      ) {
-        return SVG.outputMouthRect(
-          w,
-          h,
-          lines,
-          this.info.shape.replace("-block", ""),
-          {
-            class: `sb3-${this.info.category}`,
-          },
-        )
-      }
       return SVG.mouthRect(w, h, this.isFinal, lines, {
         class: `sb3-${this.info.category}`,
       })

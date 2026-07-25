@@ -2,21 +2,20 @@ This fork adds NitroBolt's scratch-blocks related changes
 
 Some examples:
 ```text
-object value :: object
-array value :: array
-use object {{}} and array [[]]
-
-new function :: object-block
-say [inside the branch]
-end
+{object value :: object}
+[array value :: array]
+use object {} and array []
 
 first row \n second row
 values (one) (two) @extendable
 ```
 
-Use `:: reporter-block`, `:: object-block`, or `:: array-block` for
-branch-bearing output blocks. `{{...}}` and `[[...]]` create object and array
-input slots, `\n` starts a new visual row inside the same block, and
+At the start of a line, `{... :: object}` and `[..., :: array]` create object
+and array blocks.
+Inside a block, empty `{}` and `[]` create object and array input slots.
+Use `[ ]` when an empty text input is needed.
+The older `{{...}}` and `[[...]]` input syntax remains accepted for
+compatibility. `\n` starts a new visual row inside the same block, and
 `@extendable` draws the extendable-input controls.
 
 <!--

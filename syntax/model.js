@@ -169,22 +169,14 @@ export class Block {
       shape === "cat" ||
       shape === "c-block"
     this.isFinal = /cap/.test(shape)
-    const isOutputBranch =
-      shape === "reporter-block" ||
-      shape === "object-block" ||
-      shape === "array-block"
-    this.isCommand =
-      shape === "stack" || shape === "cap" || (/block/.test(shape) && !isOutputBranch)
+    this.isCommand = shape === "stack" || shape === "cap" || /block/.test(shape)
     this.isOutline = shape === "outline"
     this.isReporter =
       shape === "reporter" ||
       shape === "object" ||
-      shape === "array" ||
-      shape === "reporter-block" ||
-      shape === "object-block" ||
-      shape === "array-block"
-    this.isObject = shape === "object" || shape === "object-block"
-    this.isArray = shape === "array" || shape === "array-block"
+      shape === "array"
+    this.isObject = shape === "object"
+    this.isArray = shape === "array"
     this.isBoolean = shape === "boolean"
 
     this.isRing = shape === "ring"
@@ -229,10 +221,7 @@ export class Block {
 
     const isNitroShape =
       this.info.shape === "object" ||
-      this.info.shape === "array" ||
-      this.info.shape === "reporter-block" ||
-      this.info.shape === "object-block" ||
-      this.info.shape === "array-block"
+      this.info.shape === "array"
     let overrides = extras || ""
     if (isNitroShape) {
       if (overrides) {
@@ -268,12 +257,9 @@ export class Block {
       )
     }
     if (isNitroShape) {
-      const wrapped = this.isObject
-        ? `{${text}}`
-        : this.isArray
-          ? `[${text}]`
-          : `(${text})`
-      return wrapped + overrideText
+      return this.isObject
+        ? `{${text}${overrideText}}`
+        : `[${text}${overrideText}]`
     }
     const textWithOverrides = text + overrideText
     return this.info.shape === "reporter"

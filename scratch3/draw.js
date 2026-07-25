@@ -124,13 +124,17 @@ export default class SVG {
   static objectPath(w, h) {
     const r = Math.min(16, h / 2)
     const straight = Math.max(0, h - 2 * r)
+    // Keep the outward-facing brace tips inside the SVG viewport so their
+    // stroke is not clipped at x=0 or x=w.
+    const left = 0.5
+    const right = w - 0.5
     return [
-      `M ${r} 0`,
-      `H ${w - r}`,
+      `M ${left + r} 0`,
+      `H ${right - r}`,
       `c ${0.5625 * r} ${0.125 * r} ${0.25 * r} ${r} ${r} ${r}`,
       straight ? `v ${straight}` : "",
       `c ${-0.75 * r} 0 ${-0.4375 * r} ${0.875 * r} ${-r} ${r}`,
-      `H ${r}`,
+      `H ${left + r}`,
       `c ${-0.5625 * r} ${-0.125 * r} ${-0.25 * r} ${-r} ${-r} ${-r}`,
       straight ? `v ${-straight}` : "",
       `c ${0.75 * r} 0 ${0.4375 * r} ${-0.875 * r} ${r} ${-r}`,
@@ -140,47 +144,6 @@ export default class SVG {
 
   static objectRect(w, h, props) {
     return SVG.path({ ...props, path: SVG.objectPath(w, h) })
-  }
-
-  static outputMouthRect(w, h, lines, shape, props) {
-    let outer
-    if (shape === "object") {
-      outer = SVG.objectPath(w, h)
-    } else if (shape === "array") {
-      outer = [`M 0 0 H ${w} V ${h} H 0 Z`]
-    } else {
-      const r = h / 2
-      outer = [
-        `M ${r} 0 H ${w - r}`,
-        `A ${r} ${r} 0 0 1 ${w} ${r}`,
-        `A ${r} ${r} 0 0 1 ${w - r} ${h}`,
-        `H ${r}`,
-        `A ${r} ${r} 0 0 1 0 ${h - r}`,
-        `A ${r} ${r} 0 0 1 ${r} 0`,
-        "Z",
-      ]
-    }
-
-    const mouths = []
-    let y = lines[0].height
-    for (let i = 1; i < lines.length; i += 2) {
-      const top = y - 3
-      y += lines[i].height - 3
-      const bottom = y + 3
-      mouths.push(
-        `M ${w + 1} ${top} H 20 A 4 4 0 0 0 16 ${top + 4}`,
-        `V ${bottom - 4} A 4 4 0 0 0 20 ${bottom} H ${w + 1} Z`,
-      )
-      if (lines[i + 1]) {
-        y += lines[i + 1].height + 3
-      }
-    }
-
-    return SVG.path({
-      ...props,
-      "fill-rule": "evenodd",
-      path: outer.concat(mouths),
-    })
   }
 
   static topNotch(w, y) {

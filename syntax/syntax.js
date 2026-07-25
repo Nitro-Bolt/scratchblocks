@@ -273,7 +273,13 @@ function parseLines(code, languages) {
       switch (tok) {
         case "[":
           label = null
-          children.push(peek() === "[" ? pTypedInput("array") : pString())
+          children.push(
+            peek() === "]"
+              ? pEmptyTypedInput("array")
+              : peek() === "["
+                ? pTypedInput("array")
+                : pString(),
+          )
           break
         case "(":
           label = null
@@ -285,7 +291,13 @@ function parseLines(code, languages) {
           break
         case "{":
           label = null
-          children.push(peek() === "{" ? pTypedInput("object") : pEmbedded())
+          children.push(
+            peek() === "}"
+              ? pEmptyTypedInput("object")
+              : peek() === "{"
+                ? pTypedInput("object")
+                : pEmbedded(),
+          )
           break
         case " ":
         case "\t":
@@ -396,7 +408,19 @@ function parseLines(code, languages) {
     return new Input(shape, value)
   }
 
+  function pEmptyTypedInput(shape) {
+    next()
+    next()
+    return new Input(shape, "")
+  }
+
   function pBlock(end) {
+    if (!end && tok === "{" && isWrappedBlock("object")) {
+      return pWrappedBlock("object")
+    }
+    if (!end && tok === "[" && isWrappedBlock("array")) {
+      return pWrappedBlock("array")
+    }
     const children = pParts(end)
     if (tok && tok === "\n") {
       sawNL = true
@@ -418,6 +442,30 @@ function parseLines(code, languages) {
     }
 
     return makeBlock("stack", children)
+  }
+
+  function isWrappedBlock(shape) {
+    const lineEnd = code.indexOf("\n", index)
+    const line = code.slice(index, lineEnd === -1 ? code.length : lineEnd)
+    const close = shape === "object" ? "}" : "]"
+    return (
+      line.endsWith(close) &&
+      new RegExp(`::\\s*${shape}(?:\\s+[^${close}]+)?\\s*\\${close}$`).test(line)
+    )
+  }
+
+  function pWrappedBlock(shape) {
+    const close = shape === "object" ? "}" : "]"
+    next()
+    const children = pParts(close)
+    if (tok === close) {
+      next()
+    }
+    if (tok === "\n") {
+      sawNL = true
+      next()
+    }
+    return makeBlock(shape, children)
   }
 
   function pReporter() {

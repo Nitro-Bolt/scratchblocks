@@ -155,39 +155,32 @@ describe("literals", () => {
 
 describe("NitroBolt block syntax", () => {
   test("object and array output shapes", () => {
-    const object = parseBlock("object value :: object")
-    const array = parseBlock("array value :: array")
+    const object = parseBlock("{object value :: object}")
+    const array = parseBlock("[array value :: array]")
     expect(object.info.shape).toBe("object")
     expect(array.info.shape).toBe("array")
-    expect(object.stringify()).toBe("{object value} :: object")
-    expect(array.stringify()).toBe("[array value] :: array")
+    expect(object.stringify()).toBe("{object value :: object}")
+    expect(array.stringify()).toBe("[array value :: array]")
   })
 
   test("object and array input slots", () => {
-    const block = parseBlock("use {{object}} with [[array]]")
+    const block = parseBlock("use {} with []")
     expect(block.children[1]).toMatchObject({
       isInput: true,
       shape: "object",
-      value: "object",
+      value: "",
     })
     expect(block.children[3]).toMatchObject({
       isInput: true,
       shape: "array",
-      value: "array",
+      value: "",
     })
   })
 
-  test("reporter-shaped blocks can contain branches", () => {
-    const block = parseBlock(
-      "new function :: object-block\nsay [inside]\nend",
-    )
-    expect(block.info.shape).toBe("object-block")
-    expect(block.isObject).toBe(true)
-    expect(block.hasScript).toBe(true)
-    expect(block.children.find(child => child.isScript).blocks).toHaveLength(1)
-    expect(block.stringify()).toBe(
-      "new function :: object-block\n  say [inside]\nend",
-    )
+  test("legacy typed input syntax remains accepted", () => {
+    const block = parseBlock("use {{object}} with [[array]]")
+    expect(block.children[1].shape).toBe("object")
+    expect(block.children[3].shape).toBe("array")
   })
 
   test("escaped newlines split a block into rows", () => {
