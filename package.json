@@ -1,12 +1,12 @@
 {
-  "name": "@turbowarp/scratchblocks",
-  "version": "3.6.7",
+  "name": "@nitro-bolt/scratchblocks",
+  "version": "1.0.0",
   "description": "Make pictures of Scratch blocks from text.",
   "license": "MIT",
   "author": "Tim Radvan",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TurboWarp/scratchblocks.git"
+    "url": "git+https://github.com/Nitro-Bolt/scratchblocks.git"
   },
   "type": "module",
   "main": "build/scratchblocks.min.js",
