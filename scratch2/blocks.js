@@ -2,6 +2,7 @@ import {
   Label,
   Icon,
   Input,
+  Newline,
   Block,
   Comment,
   Glow,
@@ -99,6 +100,16 @@ class IconView {
   }
 
   draw() {
+    if (this.name === "extendable") {
+      return SVG.group([
+        SVG.polygon({ points: [0, 4, 6, 0, 6, 8], fill: "#fff" }),
+        SVG.move(
+          16,
+          0,
+          SVG.polygon({ points: [0, 0, 6, 4, 0, 8], fill: "#fff" }),
+        ),
+      ])
+    }
     return SVG.symbol(`#${this.name}`, {
       width: this.width,
       height: this.height,
@@ -115,6 +126,7 @@ class IconView {
       addInput: { width: 4, height: 8 },
       delInput: { width: 4, height: 8 },
       list: { width: 12, height: 14 },
+      extendable: { width: 22, height: 8 },
     }
   }
 }
@@ -144,6 +156,8 @@ class InputView {
       dropdown: SVG.rect,
 
       boolean: SVG.pointedRect,
+      object: SVG.roundedRect,
+      array: SVG.rect,
       stack: SVG.stackRect,
       reporter: SVG.roundedRect,
     }
@@ -210,6 +224,20 @@ class InputView {
   }
 }
 
+class NewlineView {
+  get isNewline() {
+    return true
+  }
+
+  measure() {}
+
+  draw() {
+    this.width = 0
+    this.height = 0
+    return SVG.group([])
+  }
+}
+
 class BlockView {
   constructor(block) {
     Object.assign(this, block)
@@ -264,6 +292,11 @@ class BlockView {
 
       cap: SVG.capRect,
       reporter: SVG.roundedRect,
+      object: SVG.roundedRect,
+      array: SVG.rect,
+      "reporter-block": SVG.roundedRect,
+      "object-block": SVG.roundedRect,
+      "array-block": SVG.rect,
       boolean: SVG.pointedRect,
       hat: SVG.hatRect,
       cat: SVG.hatRect,
@@ -404,7 +437,10 @@ class BlockView {
       const child = children[i]
       child.el = child.draw(this)
 
-      if (child.isScript && this.isCommand) {
+      if (child.isNewline) {
+        pushLine()
+        line = new Line(y)
+      } else if (child.isScript && this.hasScript) {
         this.hasScript = true
         pushLine()
         child.y = y
@@ -774,6 +810,8 @@ const viewFor = node => {
       return IconView
     case Input:
       return InputView
+    case Newline:
+      return NewlineView
     case Block:
       return BlockView
     case Comment:

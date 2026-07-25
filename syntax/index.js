@@ -4,6 +4,7 @@ export {
   Label,
   Icon,
   Input,
+  Newline,
   Block,
   Comment,
   Glow,

@@ -8,6 +8,7 @@ import {
   Label,
   Icon,
   Input,
+  Newline,
   Block,
   Comment,
   Glow,
@@ -272,7 +273,7 @@ function parseLines(code, languages) {
       switch (tok) {
         case "[":
           label = null
-          children.push(pString())
+          children.push(peek() === "[" ? pTypedInput("array") : pString())
           break
         case "(":
           label = null
@@ -284,7 +285,7 @@ function parseLines(code, languages) {
           break
         case "{":
           label = null
-          children.push(pEmbedded())
+          children.push(peek() === "{" ? pTypedInput("object") : pEmbedded())
           break
         case " ":
         case "\t":
@@ -316,6 +317,13 @@ function parseLines(code, languages) {
           break
         }
         case "\\":
+          if (peek() === "n") {
+            next()
+            next()
+            children.push(new Newline())
+            label = null
+            break
+          }
           next() // escape character
         // fallthrough
         case ":":
@@ -363,6 +371,29 @@ function parseLines(code, languages) {
     return !escapeV && / v$/.test(s)
       ? makeMenu("dropdown", s.slice(0, s.length - 2))
       : new Input("string", s)
+  }
+
+  function pTypedInput(shape) {
+    const close = shape === "array" ? "]" : "}"
+    next()
+    next()
+    let value = ""
+    while (tok) {
+      if (tok === close && peek() === close) {
+        next()
+        next()
+        break
+      }
+      if (tok === "\\") {
+        next()
+        if (!tok) {
+          break
+        }
+      }
+      value += tok
+      next()
+    }
+    return new Input(shape, value)
   }
 
   function pBlock(end) {

@@ -2,6 +2,7 @@ import {
   Label,
   Icon,
   Input,
+  Newline,
   Block,
   Comment,
   Glow,
@@ -93,6 +94,18 @@ export class IconView {
   }
 
   draw(iconStyle) {
+    if (this.name === "extendable") {
+      return SVG.group([
+        SVG.path({
+          class: "sb3-label",
+          path: ["M 0 8 L 6 2 L 6 14 Z"],
+        }),
+        SVG.path({
+          class: "sb3-label",
+          path: ["M 26 2 L 32 8 L 26 14 Z"],
+        }),
+      ])
+    }
     return SVG.symbol(`#sb3-${iconName(this.name, iconStyle)}`, {
       width: this.width,
       height: this.height,
@@ -109,6 +122,7 @@ export class IconView {
       addInput: { width: 4, height: 8 },
       delInput: { width: 4, height: 8 },
       list: { width: 15, height: 18 },
+      extendable: { width: 32, height: 16 },
       musicBlock: { width: 40, height: 40 },
       penBlock: { width: 40, height: 40 },
       videoBlock: { width: 40, height: 40, dy: 10 },
@@ -157,6 +171,8 @@ export class InputView {
       this.label = newView(input.label)
     }
     this.isBoolean = this.shape === "boolean"
+    this.isObject = this.shape === "object"
+    this.isArray = this.shape === "array"
     this.isDropdown = this.shape === "dropdown"
     this.isRound = !(this.isBoolean || this.isDropdown)
 
@@ -182,6 +198,8 @@ export class InputView {
       dropdown: SVG.roundRect,
 
       boolean: SVG.pointedRect,
+      object: SVG.objectRect,
+      array: SVG.roundRect,
       stack: SVG.stackRect,
       reporter: SVG.pillRect,
     }
@@ -274,12 +292,26 @@ export class InputView {
   }
 }
 
+export class NewlineView {
+  get isNewline() {
+    return true
+  }
+
+  measure() {}
+
+  draw() {
+    this.width = 0
+    this.height = 0
+    return SVG.group([])
+  }
+}
+
 class BlockView {
   constructor(block) {
     Object.assign(this, block)
     this.children = block.children.map(newView)
     this.comment = this.comment ? newView(this.comment) : null
-    this.isRound = this.isReporter
+    this.isRound = this.info.shape === "reporter"
 
     // Avoid accidental mutation
     this.info = { ...block.info }
@@ -328,6 +360,11 @@ class BlockView {
 
       cap: SVG.capRect,
       reporter: SVG.pillRect,
+      object: SVG.objectRect,
+      array: SVG.roundRect,
+      "reporter-block": SVG.pillRect,
+      "object-block": SVG.objectRect,
+      "array-block": SVG.roundRect,
       boolean: SVG.pointedRect,
       hat: SVG.hatRect,
       cat: SVG.catHat,
@@ -478,7 +515,11 @@ class BlockView {
       const child = children[i]
       child.el = child.draw(iconStyle, this)
 
-      if (child.isScript && this.isCommand) {
+      if (child.isNewline) {
+        pushLine()
+        line = new Line(y)
+        previousChild = null
+      } else if (child.isScript && this.hasScript) {
         this.hasScript = true
         pushLine()
         child.y = y - 1
@@ -894,6 +935,8 @@ const viewFor = node => {
       return IconView
     case Input:
       return InputView
+    case Newline:
+      return NewlineView
     case Block:
       return BlockView
     case Comment:

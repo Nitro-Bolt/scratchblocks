@@ -27,6 +27,11 @@ const overrideShapes = [
   "stack",
   "boolean",
   "reporter",
+  "object",
+  "array",
+  "reporter-block",
+  "object-block",
+  "array-block",
   "ring",
   "cat",
 ]

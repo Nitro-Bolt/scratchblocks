@@ -1,6 +1,23 @@
-This is a slightly customized version of scratchblocks that we use for TurboWarp's extension documentation.
+This fork adds NitroBolt's scratch-blocks related changes
 
-These patches are not a suggestion for upstream.
+Some examples:
+```text
+object value :: object
+array value :: array
+use object {{}} and array [[]]
+
+new function :: object-block
+say [inside the branch]
+end
+
+first row \n second row
+values (one) (two) @extendable
+```
+
+Use `:: reporter-block`, `:: object-block`, or `:: array-block` for
+branch-bearing output blocks. `{{...}}` and `[[...]]` create object and array
+input slots, `\n` starts a new visual row inside the same block, and
+`@extendable` draws the extendable-input controls.
 
 <!--
 Make pictures of Scratch blocks from text.

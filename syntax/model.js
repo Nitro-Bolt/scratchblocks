@@ -64,11 +64,12 @@ export class Icon {
       addInput: true,
       delInput: true,
       list: true,
+      extendable: true,
     }
   }
 
   stringify() {
-    return unicodeIcons[`@${this.name}`] || ""
+    return unicodeIcons[`@${this.name}`] || `@${this.name}`
   }
 }
 
@@ -80,9 +81,15 @@ export class Input {
 
     this.isRound = shape === "number" || shape === "number-dropdown"
     this.isBoolean = shape === "boolean"
+    this.isObject = shape === "object"
+    this.isArray = shape === "array"
     this.isStack = shape === "stack"
     this.isInset =
-      shape === "boolean" || shape === "stack" || shape === "reporter"
+      shape === "boolean" ||
+      shape === "object" ||
+      shape === "array" ||
+      shape === "stack" ||
+      shape === "reporter"
     this.isColor = shape === "color"
     this.hasArrow = shape === "dropdown" || shape === "number-dropdown"
     this.isDarker =
@@ -118,6 +125,10 @@ export class Input {
         ? `[${text}]`
         : this.isBoolean
           ? "<>"
+          : this.isObject
+            ? `{{${text}}}`
+            : this.isArray
+              ? `[[${text}]]`
           : this.isStack
             ? "{}"
             : text
@@ -129,6 +140,16 @@ export class Input {
       this.value = value // TODO translate dropdown value
       this.label = new Label(this.value, `literal-${this.shape}`)
     }
+  }
+}
+
+export class Newline {
+  get isNewline() {
+    return true
+  }
+
+  stringify() {
+    return "\\n"
   }
 }
 
@@ -148,9 +169,22 @@ export class Block {
       shape === "cat" ||
       shape === "c-block"
     this.isFinal = /cap/.test(shape)
-    this.isCommand = shape === "stack" || shape === "cap" || /block/.test(shape)
+    const isOutputBranch =
+      shape === "reporter-block" ||
+      shape === "object-block" ||
+      shape === "array-block"
+    this.isCommand =
+      shape === "stack" || shape === "cap" || (/block/.test(shape) && !isOutputBranch)
     this.isOutline = shape === "outline"
-    this.isReporter = shape === "reporter"
+    this.isReporter =
+      shape === "reporter" ||
+      shape === "object" ||
+      shape === "array" ||
+      shape === "reporter-block" ||
+      shape === "object-block" ||
+      shape === "array-block"
+    this.isObject = shape === "object" || shape === "object-block"
+    this.isArray = shape === "array" || shape === "array-block"
     this.isBoolean = shape === "boolean"
 
     this.isRing = shape === "ring"
@@ -165,7 +199,7 @@ export class Block {
   stringify(extras) {
     let firstInput = null
     let checkAlias = false
-    let text = this.children
+    const text = this.children
       .map(child => {
         if (child.isIcon) {
           checkAlias = true
@@ -193,7 +227,19 @@ export class Block {
       }
     }
 
+    const isNitroShape =
+      this.info.shape === "object" ||
+      this.info.shape === "array" ||
+      this.info.shape === "reporter-block" ||
+      this.info.shape === "object-block" ||
+      this.info.shape === "array-block"
     let overrides = extras || ""
+    if (isNitroShape) {
+      if (overrides) {
+        overrides += " "
+      }
+      overrides += this.info.shape
+    }
     if (
       this.info.categoryIsDefault === false ||
       (this.info.category === "custom-arg" &&
@@ -205,16 +251,31 @@ export class Block {
       }
       overrides += this.info.category
     }
-    if (overrides) {
-      text += ` :: ${overrides}`
+    const overrideText = overrides ? ` :: ${overrides}` : ""
+    if (this.hasScript) {
+      if (!isNitroShape) {
+        return text + overrideText + "\nend"
+      }
+      const firstNewline = text.indexOf("\n")
+      if (firstNewline === -1) {
+        return text + overrideText + "\nend"
+      }
+      return (
+        text.slice(0, firstNewline).trimEnd() +
+        overrideText +
+        text.slice(firstNewline) +
+        "\nend"
+      )
     }
-    return this.hasScript
-      ? text + "\nend"
-      : this.info.shape === "reporter"
-        ? `(${text})`
-        : this.info.shape === "boolean"
-          ? `<${text}>`
-          : text
+    if (isNitroShape) {
+      return `(${text})${overrideText}`
+    }
+    const textWithOverrides = text + overrideText
+    return this.info.shape === "reporter"
+      ? `(${textWithOverrides})`
+      : this.info.shape === "boolean"
+        ? `<${textWithOverrides}>`
+        : textWithOverrides
   }
 
   translate(lang, isShallow) {

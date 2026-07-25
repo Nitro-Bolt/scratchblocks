@@ -121,6 +121,24 @@ export default class SVG {
     return SVG.path({ ...props, path: SVG.pointedPath(w, h) })
   }
 
+  static objectPath(w, h) {
+    const r = Math.min(16, h / 2)
+    return [
+      `M ${r} 0`,
+      `H ${w - r}`,
+      `c ${0.5625 * r} ${0.125 * r} ${0.25 * r} ${r} ${r} ${r}`,
+      `c ${-0.75 * r} 0 ${-0.4375 * r} ${0.875 * r} ${-r} ${r}`,
+      `H ${r}`,
+      `c ${-0.5625 * r} ${-0.125 * r} ${-0.25 * r} ${-r} ${-r} ${-r}`,
+      `c ${0.75 * r} 0 ${0.4375 * r} ${-0.875 * r} ${r} ${-r}`,
+      "Z",
+    ]
+  }
+
+  static objectRect(w, h, props) {
+    return SVG.path({ ...props, path: SVG.objectPath(w, h) })
+  }
+
   static topNotch(w, y) {
     return `c 2 0 3 1 4 2
       l 4 4
