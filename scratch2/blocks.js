@@ -304,7 +304,7 @@ class BlockView {
 
   drawSelf(w, h, lines) {
     // mouths
-    if (lines.length > 1) {
+    if (lines.some(line => line.isScript)) {
       return SVG.mouthRect(w, h, this.isFinal, lines, {
         class: `sb-${this.info.category} sb-bevel`,
       })

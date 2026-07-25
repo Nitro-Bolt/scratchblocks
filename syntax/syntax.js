@@ -273,13 +273,7 @@ function parseLines(code, languages) {
       switch (tok) {
         case "[":
           label = null
-          children.push(
-            peek() === "]"
-              ? pEmptyTypedInput("array")
-              : peek() === "["
-                ? pTypedInput("array")
-                : pString(),
-          )
+          children.push(peek() === "]" ? pEmptyTypedInput("array") : pString())
           break
         case "(":
           label = null
@@ -291,13 +285,7 @@ function parseLines(code, languages) {
           break
         case "{":
           label = null
-          children.push(
-            peek() === "}"
-              ? pEmptyTypedInput("object")
-              : peek() === "{"
-                ? pTypedInput("object")
-                : pEmbedded(),
-          )
+          children.push(peek() === "}" ? pEmptyTypedInput("object") : pEmbedded())
           break
         case " ":
         case "\t":
@@ -383,29 +371,6 @@ function parseLines(code, languages) {
     return !escapeV && / v$/.test(s)
       ? makeMenu("dropdown", s.slice(0, s.length - 2))
       : new Input("string", s)
-  }
-
-  function pTypedInput(shape) {
-    const close = shape === "array" ? "]" : "}"
-    next()
-    next()
-    let value = ""
-    while (tok) {
-      if (tok === close && peek() === close) {
-        next()
-        next()
-        break
-      }
-      if (tok === "\\") {
-        next()
-        if (!tok) {
-          break
-        }
-      }
-      value += tok
-      next()
-    }
-    return new Input(shape, value)
   }
 
   function pEmptyTypedInput(shape) {

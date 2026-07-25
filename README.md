@@ -14,9 +14,8 @@ At the start of a line, `{... :: object}` and `[..., :: array]` create object
 and array blocks.
 Inside a block, empty `{}` and `[]` create object and array input slots.
 Use `[ ]` when an empty text input is needed.
-The older `{{...}}` and `[[...]]` input syntax remains accepted for
-compatibility. `\n` starts a new visual row inside the same block, and
-`@extendable` draws the extendable-input controls.
+`\n` starts a new visual row inside the same block, and `@extendable` draws
+the extendable-input controls.
 
 <!--
 Make pictures of Scratch blocks from text.

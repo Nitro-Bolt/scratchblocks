@@ -175,12 +175,7 @@ describe("NitroBolt block syntax", () => {
       shape: "array",
       value: "",
     })
-  })
-
-  test("legacy typed input syntax remains accepted", () => {
-    const block = parseBlock("use {{object}} with [[array]]")
-    expect(block.children[1].shape).toBe("object")
-    expect(block.children[3].shape).toBe("array")
+    expect(block.stringify()).toBe("use {} with []")
   })
 
   test("escaped newlines split a block into rows", () => {

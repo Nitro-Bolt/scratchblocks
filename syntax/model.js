@@ -126,9 +126,9 @@ export class Input {
         : this.isBoolean
           ? "<>"
           : this.isObject
-            ? `{{${text}}}`
+            ? "{}"
             : this.isArray
-              ? `[[${text}]]`
+              ? "[]"
           : this.isStack
             ? "{}"
             : text
