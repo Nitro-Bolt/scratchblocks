@@ -126,8 +126,8 @@ export default class SVG {
     const straight = Math.max(0, h - 2 * r)
     // Keep the outward-facing brace tips inside the SVG viewport so their
     // stroke is not clipped at x=0 or x=w.
-    const left = 0.5
-    const right = w - 0.5
+    const left = 2
+    const right = w - 2
     return [
       `M ${left + r} 0`,
       `H ${right - r}`,

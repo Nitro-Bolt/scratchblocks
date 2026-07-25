@@ -183,13 +183,17 @@ describe("NitroBolt block syntax", () => {
     expect(block.children.some(child => child.isNewline)).toBe(true)
   })
 
-  test("extendable controls have a dedicated icon", () => {
-    const block = parseBlock("values @extendable")
+  test("extendable controls use separate icons", () => {
+    const block = parseBlock("values @delInput (one) @addInput")
     expect(block.children[1]).toMatchObject({
       isIcon: true,
-      name: "extendable",
+      name: "delInput",
     })
-    expect(block.stringify()).toBe("values @extendable")
+    expect(block.children[3]).toMatchObject({
+      isIcon: true,
+      name: "addInput",
+    })
+    expect(block.stringify()).toBe("values ◂ (one) ▸")
   })
 })
 

@@ -94,32 +94,6 @@ export class IconView {
   }
 
   draw(iconStyle) {
-    if (this.name === "extendable") {
-      const makeArrow = () =>
-        SVG.group([
-          SVG.el("path", {
-            d: "M3.65.145a2.41 2.41 0 0 1 1.72.71l3.92 3.92a2.45 2.45 0 0 1 0 3.45l-3.92 3.91a2.42 2.42 0 0 1-1.72.72 2.48 2.48 0 0 1-1.73-.71c-.24-.29-.71-.72-.71-5.65 0-4.93.46-5.39.71-5.64a2.44 2.44 0 0 1 1.73-.71z",
-            fill: "#231f20",
-            opacity: "0.1",
-          }),
-          SVG.el("path", {
-            d: "M8.985 6.51a1.43 1.43 0 0 1-.42 1l-3.92 3.94a1.44 1.44 0 0 1-2 0c-.56-.56-.56-9.31 0-9.87a1.44 1.44 0 0 1 2 0l3.92 3.92a1.43 1.43 0 0 1 .42 1.01z",
-            fill: "#fff",
-          }),
-        ])
-      const left = makeArrow()
-      const right = makeArrow()
-      SVG.setProps(left, {
-        transform: "translate(13 1.5) scale(-1 1)",
-      })
-      SVG.setProps(right, {
-        transform: "translate(19 1.5)",
-      })
-      return SVG.group([
-        left,
-        right,
-      ])
-    }
     return SVG.symbol(`#sb3-${iconName(this.name, iconStyle)}`, {
       width: this.width,
       height: this.height,
@@ -133,10 +107,9 @@ export class IconView {
       turnLeft: { width: 24, height: 24 },
       turnRight: { width: 24, height: 24 },
       loopArrow: { width: 24, height: 24 },
-      addInput: { width: 4, height: 8 },
-      delInput: { width: 4, height: 8 },
+      addInput: { width: 10, height: 13 },
+      delInput: { width: 10, height: 13 },
       list: { width: 15, height: 18 },
-      extendable: { width: 32, height: 16 },
       musicBlock: { width: 40, height: 40 },
       penBlock: { width: 40, height: 40 },
       videoBlock: { width: 40, height: 40, dy: 10 },
@@ -213,7 +186,7 @@ export class InputView {
 
       boolean: SVG.pointedRect,
       object: SVG.objectRect,
-      array: SVG.rect,
+      array: SVG.roundRect,
       stack: SVG.stackRect,
       reporter: SVG.pillRect,
     }
@@ -379,7 +352,7 @@ class BlockView {
       cap: SVG.capRect,
       reporter: SVG.pillRect,
       object: SVG.objectRect,
-      array: SVG.rect,
+      array: SVG.roundRect,
       boolean: SVG.pointedRect,
       hat: SVG.hatRect,
       cat: SVG.catHat,

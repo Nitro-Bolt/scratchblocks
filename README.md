@@ -7,15 +7,15 @@ Some examples:
 use object {} and array []
 
 first row \n second row
-values (one) (two) @extendable
+values @delInput (one) (two) @addInput
 ```
 
 At the start of a line, `{... :: object}` and `[..., :: array]` create object
 and array blocks.
 Inside a block, empty `{}` and `[]` create object and array input slots.
 Use `[ ]` when an empty text input is needed.
-`\n` starts a new visual row inside the same block, and `@extendable` draws
-the extendable-input controls.
+`\n` starts a new visual row inside the same block. `@delInput` and
+`@addInput` draw the left and right extendable-input controls independently.
 
 <!--
 Make pictures of Scratch blocks from text.

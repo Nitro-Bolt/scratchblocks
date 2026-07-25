@@ -64,7 +64,6 @@ export class Icon {
       addInput: true,
       delInput: true,
       list: true,
-      extendable: true,
     }
   }
 

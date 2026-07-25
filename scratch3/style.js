@@ -21,6 +21,26 @@ export default class Style {
   }
 
   static makeCommonIcons() {
+    const makeExtendableArrow = () =>
+      SVG.group([
+        SVG.el("path", {
+          d: "M3.65.145a2.41 2.41 0 0 1 1.72.71l3.92 3.92a2.45 2.45 0 0 1 0 3.45l-3.92 3.91a2.42 2.42 0 0 1-1.72.72 2.48 2.48 0 0 1-1.73-.71c-.24-.29-.71-.72-.71-5.65 0-4.93.46-5.39.71-5.64a2.44 2.44 0 0 1 1.73-.71z",
+          fill: "#231f20",
+          opacity: "0.1",
+        }),
+        SVG.el("path", {
+          d: "M8.985 6.51a1.43 1.43 0 0 1-.42 1l-3.92 3.94a1.44 1.44 0 0 1-2 0c-.56-.56-.56-9.31 0-9.87a1.44 1.44 0 0 1 2 0l3.92 3.92a1.43 1.43 0 0 1 .42 1.01z",
+          fill: "#fff",
+        }),
+      ])
+    const addInput = makeExtendableArrow()
+    const delInput = makeExtendableArrow()
+    SVG.setProps(addInput, { id: "sb3-addInput" })
+    SVG.setProps(delInput, {
+      id: "sb3-delInput",
+      transform: "translate(10 0) scale(-1 1)",
+    })
+
     return [
       SVG.setProps(
         SVG.group([
@@ -52,16 +72,8 @@ export default class Style {
         },
       ),
 
-      SVG.el("path", {
-        d: "M0 0L4 4L0 8Z",
-        fill: "#111",
-        id: "sb3-addInput",
-      }),
-      SVG.el("path", {
-        d: "M4 0L4 8L0 4Z",
-        fill: "#111",
-        id: "sb3-delInput",
-      }),
+      addInput,
+      delInput,
 
       SVG.setProps(
         SVG.group([

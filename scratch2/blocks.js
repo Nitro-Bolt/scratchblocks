@@ -100,16 +100,6 @@ class IconView {
   }
 
   draw() {
-    if (this.name === "extendable") {
-      return SVG.group([
-        SVG.polygon({ points: [0, 4, 6, 0, 6, 8], fill: "#fff" }),
-        SVG.move(
-          16,
-          0,
-          SVG.polygon({ points: [0, 0, 6, 4, 0, 8], fill: "#fff" }),
-        ),
-      ])
-    }
     return SVG.symbol(`#${this.name}`, {
       width: this.width,
       height: this.height,
@@ -126,7 +116,6 @@ class IconView {
       addInput: { width: 4, height: 8 },
       delInput: { width: 4, height: 8 },
       list: { width: 12, height: 14 },
-      extendable: { width: 22, height: 8 },
     }
   }
 }
