@@ -1,9 +1,3 @@
-function assert(bool, message) {
-  if (!bool) {
-    throw new Error(`Assertion failed! ${message || ""}`)
-  }
-}
-
 import {
   Label,
   Icon,
@@ -216,7 +210,6 @@ function parseLines(code, languages) {
       }
     }
   }
-  let sawNL
 
   let define = []
   languages.map(lang => {
@@ -286,7 +279,7 @@ function parseLines(code, languages) {
         case "{":
           label = null
           children.push(
-            peek() === "}" ? pEmptyTypedInput("object") : pEmbedded(),
+            peek() === "}" ? pEmptyTypedInput("object") : pWrappedBlock("object"),
           )
           break
         case " ":
@@ -390,7 +383,6 @@ function parseLines(code, languages) {
     }
     const children = pParts(end)
     if (tok && tok === "\n") {
-      sawNL = true
       next()
     }
     if (children.length === 0) {
@@ -432,7 +424,6 @@ function parseLines(code, languages) {
       next()
     }
     if (tok === "\n") {
-      sawNL = true
       next()
     }
     return makeBlock(shape, children)
@@ -515,34 +506,6 @@ function parseLines(code, languages) {
       return new Input("boolean")
     }
     return makeBlock("boolean", children)
-  }
-
-  function pEmbedded() {
-    next() // '{'
-
-    sawNL = false
-    const f = function () {
-      while (tok && tok !== "}") {
-        const block = pBlock("}")
-        if (block) {
-          return block
-        }
-      }
-    }
-    const scripts = parseScripts(f)
-    let blocks = []
-    scripts.forEach(script => {
-      blocks = blocks.concat(script.blocks)
-    })
-
-    if (tok === "}") {
-      next()
-    }
-    if (!sawNL) {
-      assert(blocks.length <= 1)
-      return blocks.length ? blocks[0] : makeBlock("stack", [])
-    }
-    return new Script(blocks)
   }
 
   function pIcon() {

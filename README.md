@@ -1,22 +1,21 @@
-This fork adds NitroBolt's scratch-blocks related changes
+This fork adds NitroBolt's scratch-blocks features:
 
-Some examples:
-```text
-{object value}
-[array value]
-use object {} and array []
+- Object blocks use `{object value}` and object inputs use `{}`.
+- Array blocks use `[array value]` and array inputs use `[]`.
+- Overrides stay inside object and array block delimiters, such as
+  `[array value :: #4D5057]`.
+- Use `[ ]` when an empty text input is needed instead of an array input.
+- `\n` starts a new visual row inside the same block.
+- `@delInput` and `@addInput` render the two extendable-input controls
+  independently.
+- `c-block` makes a custom block C-shaped. Put the branch on the following
+  lines and close it with `end`:
 
-first row \n second row
-values (one) (two) @delInput @addInput
-```
-
-At the start of a line, `{...}` and `[...]` create object and array blocks.
-Overrides remain inside the delimiters, for example
-`[array value :: #4D5057]`.
-Inside a block, empty `{}` and `[]` create object and array input slots.
-Use `[ ]` when an empty text input is needed.
-`\n` starts a new visual row inside the same block. `@delInput` and
-`@addInput` draw the left and right extendable-input controls independently.
+  ```text
+  new function [] :: #FF894D c-block
+    say [Hello!]
+  end
+  ```
 
 <!--
 Make pictures of Scratch blocks from text.

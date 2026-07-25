@@ -183,6 +183,22 @@ describe("NitroBolt block syntax", () => {
     expect(block.stringify()).toBe("use {} with []")
   })
 
+  test("object output blocks may be nested in other blocks", () => {
+    const block = parseBlock("use {my object}")
+    expect(block.children[1]).toMatchObject({
+      isBlock: true,
+      info: expect.objectContaining({ shape: "object" }),
+    })
+  })
+
+  test("shape overrides disambiguate nested array output blocks", () => {
+    const block = parseBlock("use (my array :: array)")
+    expect(block.children[1]).toMatchObject({
+      isBlock: true,
+      info: expect.objectContaining({ shape: "array" }),
+    })
+  })
+
   test("escaped newlines split a block into rows", () => {
     const block = parseBlock("first row \\n second row")
     expect(block.children.some(child => child.isNewline)).toBe(true)
@@ -650,6 +666,14 @@ describe("c blocks", () => {
   const ifBlock = {
     selector: "doIf",
   }
+
+  test("custom c-block shape override", () => {
+    const block = parseBlock(
+      "new function [] :: #ff894d c-block\nsay [Hello!]\nend"
+    )
+    expect(block.info.shape).toBe("c-block")
+    expect(block.hasScript).toBe(true)
+  })
 
   test("if else", () => {
     // We used to give these different IDs for toJSON(); we no longer need to.

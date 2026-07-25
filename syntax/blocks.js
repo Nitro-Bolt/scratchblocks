@@ -25,6 +25,7 @@ const overrideShapes = [
   "hat",
   "cap",
   "stack",
+  "c-block",
   "boolean",
   "reporter",
   "object",
