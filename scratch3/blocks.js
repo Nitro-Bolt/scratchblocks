@@ -95,15 +95,29 @@ export class IconView {
 
   draw(iconStyle) {
     if (this.name === "extendable") {
+      const makeArrow = () =>
+        SVG.group([
+          SVG.el("path", {
+            d: "M3.65.145a2.41 2.41 0 0 1 1.72.71l3.92 3.92a2.45 2.45 0 0 1 0 3.45l-3.92 3.91a2.42 2.42 0 0 1-1.72.72 2.48 2.48 0 0 1-1.73-.71c-.24-.29-.71-.72-.71-5.65 0-4.93.46-5.39.71-5.64a2.44 2.44 0 0 1 1.73-.71z",
+            fill: "#231f20",
+            opacity: "0.1",
+          }),
+          SVG.el("path", {
+            d: "M8.985 6.51a1.43 1.43 0 0 1-.42 1l-3.92 3.94a1.44 1.44 0 0 1-2 0c-.56-.56-.56-9.31 0-9.87a1.44 1.44 0 0 1 2 0l3.92 3.92a1.43 1.43 0 0 1 .42 1.01z",
+            fill: "#fff",
+          }),
+        ])
+      const left = makeArrow()
+      const right = makeArrow()
+      SVG.setProps(left, {
+        transform: "translate(13 1.5) scale(-1 1)",
+      })
+      SVG.setProps(right, {
+        transform: "translate(19 1.5)",
+      })
       return SVG.group([
-        SVG.path({
-          class: "sb3-label",
-          path: ["M 0 8 L 6 2 L 6 14 Z"],
-        }),
-        SVG.path({
-          class: "sb3-label",
-          path: ["M 26 2 L 32 8 L 26 14 Z"],
-        }),
+        left,
+        right,
       ])
     }
     return SVG.symbol(`#sb3-${iconName(this.name, iconStyle)}`, {
@@ -199,7 +213,7 @@ export class InputView {
 
       boolean: SVG.pointedRect,
       object: SVG.objectRect,
-      array: SVG.roundRect,
+      array: SVG.rect,
       stack: SVG.stackRect,
       reporter: SVG.pillRect,
     }
@@ -220,7 +234,7 @@ export class InputView {
       w = this.label.width + 2 * px
       label = SVG.move(px, 9, label)
     } else {
-      w = this.isInset ? 30 : null
+      w = this.isInset ? 48 : null
     }
     if (this.hasArrow) {
       w += 20
@@ -361,10 +375,10 @@ class BlockView {
       cap: SVG.capRect,
       reporter: SVG.pillRect,
       object: SVG.objectRect,
-      array: SVG.roundRect,
+      array: SVG.rect,
       "reporter-block": SVG.pillRect,
       "object-block": SVG.objectRect,
-      "array-block": SVG.roundRect,
+      "array-block": SVG.rect,
       boolean: SVG.pointedRect,
       hat: SVG.hatRect,
       cat: SVG.catHat,
@@ -376,6 +390,21 @@ class BlockView {
   drawSelf(iconStyle, w, h, lines) {
     // mouths
     if (lines.length > 1) {
+      if (
+        this.info.shape === "reporter-block" ||
+        this.info.shape === "object-block" ||
+        this.info.shape === "array-block"
+      ) {
+        return SVG.outputMouthRect(
+          w,
+          h,
+          lines,
+          this.info.shape.replace("-block", ""),
+          {
+            class: `sb3-${this.info.category}`,
+          },
+        )
+      }
       return SVG.mouthRect(w, h, this.isFinal, lines, {
         class: `sb3-${this.info.category}`,
       })

@@ -268,7 +268,12 @@ export class Block {
       )
     }
     if (isNitroShape) {
-      return `(${text})${overrideText}`
+      const wrapped = this.isObject
+        ? `{${text}}`
+        : this.isArray
+          ? `[${text}]`
+          : `(${text})`
+      return wrapped + overrideText
     }
     const textWithOverrides = text + overrideText
     return this.info.shape === "reporter"

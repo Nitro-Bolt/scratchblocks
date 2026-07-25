@@ -159,8 +159,8 @@ describe("NitroBolt block syntax", () => {
     const array = parseBlock("array value :: array")
     expect(object.info.shape).toBe("object")
     expect(array.info.shape).toBe("array")
-    expect(object.stringify()).toBe("(object value) :: object")
-    expect(array.stringify()).toBe("(array value) :: array")
+    expect(object.stringify()).toBe("{object value} :: object")
+    expect(array.stringify()).toBe("[array value] :: array")
   })
 
   test("object and array input slots", () => {
