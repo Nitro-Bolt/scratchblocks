@@ -1190,13 +1190,6 @@ export default [
     category: "grey",
   },
   {
-    id: "scratchblocks:addInput",
-    spec: "%1 @addInput",
-    inputs: ["%n"],
-    shape: "ring",
-    category: "grey",
-  },
-  {
     id: "SENSING_USERID",
     spec: "user id",
     inputs: [],

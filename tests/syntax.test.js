@@ -216,6 +216,17 @@ describe("NitroBolt block syntax", () => {
     })
     expect(block.stringify()).toBe("values ◂ (one) ▸")
   })
+  test("addInput does not wrap a reporter in a ring", () => {
+    const block = parseBlock("(hello @addInput :: extension)")
+    expect(block.info).toMatchObject({
+      shape: "reporter",
+      category: "extension",
+    })
+    expect(block.children[1]).toMatchObject({
+      isIcon: true,
+      name: "addInput",
+    })
+  })
 })
 
 describe("escaping and stringifying", () => {
