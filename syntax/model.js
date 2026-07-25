@@ -222,12 +222,6 @@ export class Block {
       this.info.shape === "object" ||
       this.info.shape === "array"
     let overrides = extras || ""
-    if (isNitroShape) {
-      if (overrides) {
-        overrides += " "
-      }
-      overrides += this.info.shape
-    }
     if (
       this.info.categoryIsDefault === false ||
       (this.info.category === "custom-arg" &&

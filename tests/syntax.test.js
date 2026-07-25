@@ -155,17 +155,17 @@ describe("literals", () => {
 
 describe("NitroBolt block syntax", () => {
   test("object and array output shapes", () => {
-    const object = parseBlock("{object value :: object}")
-    const array = parseBlock("[array value :: array]")
-    const coloredArray = parseBlock("[array value :: array #4D5057]")
+    const object = parseBlock("{object value}")
+    const array = parseBlock("[array value]")
+    const coloredArray = parseBlock("[array value :: #4D5057]")
     expect(object.info.shape).toBe("object")
     expect(array.info.shape).toBe("array")
     expect(coloredArray.info).toMatchObject({
       shape: "array",
       color: "#4D5057",
     })
-    expect(object.stringify()).toBe("{object value :: object}")
-    expect(array.stringify()).toBe("[array value :: array]")
+    expect(object.stringify()).toBe("{object value}")
+    expect(array.stringify()).toBe("[array value]")
   })
 
   test("object and array input slots", () => {
@@ -632,7 +632,7 @@ describe("standalone blocks", () => {
   })
 
   test("standalone inputs get put in stack block", () => {
-    expect(parseBlock("[cheesecake]").info.shape).toBe("stack")
+    expect(parseBlock("[cheesecake]").info.shape).toBe("array")
     expect(parseBlock("(3.12)").info.shape).toBe("stack")
     expect(parseBlock("(menu v)").info.shape).toBe("stack")
     expect(parseBlock("[dropdown v]").info.shape).toBe("stack")

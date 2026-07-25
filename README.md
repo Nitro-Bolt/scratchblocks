@@ -2,16 +2,17 @@ This fork adds NitroBolt's scratch-blocks related changes
 
 Some examples:
 ```text
-{object value :: object}
-[array value :: array]
+{object value}
+[array value]
 use object {} and array []
 
 first row \n second row
 values @delInput (one) (two) @addInput
 ```
 
-At the start of a line, `{... :: object}` and `[..., :: array]` create object
-and array blocks.
+At the start of a line, `{...}` and `[...]` create object and array blocks.
+Overrides remain inside the delimiters, for example
+`[array value :: #4D5057]`.
 Inside a block, empty `{}` and `[]` create object and array input slots.
 Use `[ ]` when an empty text input is needed.
 `\n` starts a new visual row inside the same block. `@delInput` and

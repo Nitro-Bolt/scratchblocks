@@ -123,21 +123,33 @@ export default class SVG {
 
   static objectPath(w, h) {
     const r = Math.min(16, h / 2, w / 4)
-    const straight = Math.max(0, h - 2 * r)
+    const cy = h / 2
     const left = 0
     const right = w
+    const tipDepth = Math.min(2, r / 4)
+    const tipHalfHeight = Math.min(1.5, r / 5)
     return [
       `M ${left + r} 0`,
       `H ${right - r}`,
-      `c ${0.5625 * r} ${0.125 * r} ${0.25 * r} ${r} ${r} ${r}`,
-      straight ? `v ${straight}` : "",
-      `c ${-0.75 * r} 0 ${-0.4375 * r} ${0.875 * r} ${-r} ${r}`,
+      `C ${right - 0.4375 * r} ${0.125 * r}`,
+      `${right - 0.75 * r} ${cy - tipHalfHeight}`,
+      `${right - tipDepth} ${cy - tipHalfHeight}`,
+      `L ${right} ${cy}`,
+      `L ${right - tipDepth} ${cy + tipHalfHeight}`,
+      `C ${right - 0.75 * r} ${cy + tipHalfHeight}`,
+      `${right - 0.4375 * r} ${h - 0.125 * r}`,
+      `${right - r} ${h}`,
       `H ${left + r}`,
-      `c ${-0.5625 * r} ${-0.125 * r} ${-0.25 * r} ${-r} ${-r} ${-r}`,
-      straight ? `v ${-straight}` : "",
-      `c ${0.75 * r} 0 ${0.4375 * r} ${-0.875 * r} ${r} ${-r}`,
+      `C ${left + 0.4375 * r} ${h - 0.125 * r}`,
+      `${left + 0.75 * r} ${cy + tipHalfHeight}`,
+      `${left + tipDepth} ${cy + tipHalfHeight}`,
+      `L ${left} ${cy}`,
+      `L ${left + tipDepth} ${cy - tipHalfHeight}`,
+      `C ${left + 0.75 * r} ${cy - tipHalfHeight}`,
+      `${left + 0.4375 * r} ${0.125 * r}`,
+      `${left + r} 0`,
       "Z",
-    ].filter(Boolean)
+    ]
   }
 
   static objectRect(w, h, props) {

@@ -416,15 +416,10 @@ function parseLines(code, languages) {
     if (!line.endsWith(close)) {
       return false
     }
-    const overrideAt = line.lastIndexOf("::")
-    if (overrideAt === -1) {
+    if (shape === "array" && / v\]$/.test(line) && !line.includes("::")) {
       return false
     }
-    return line
-      .slice(overrideAt + 2, -1)
-      .trim()
-      .split(/\s+/)
-      .includes(shape)
+    return true
   }
 
   function pWrappedBlock(shape) {
