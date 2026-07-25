@@ -685,7 +685,7 @@ describe("comparison ops: < and > ", () => {
   })
 })
 
-// Test that blocks renamed between Scratch 2 and Scratch 3 work in either form.
+// Test that blocks with legacy names work in either form.
 describe("renamed blocks", () => {
   const say = {
     selector: "say:duration:elapsed:from:",

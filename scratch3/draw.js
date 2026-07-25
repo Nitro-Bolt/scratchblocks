@@ -101,20 +101,24 @@ export default class SVG {
   }
 
   static pillRect(w, h, props) {
-    const r = h / 2
+    // Keep ordinary one-row outputs fully rounded. Straight side walls only
+    // appear once the block grows beyond the 48px output-shape threshold.
+    const r = Math.min(24, h / 2)
     return SVG.rect(w, h, { ...props, rx: r, ry: r })
   }
 
   static pointedPath(w, h) {
-    const r = h / 2
+    const r = Math.min(24, h / 2)
     return [
       `M ${r} 0`,
       `L ${w - r} 0 ${w} ${r}`,
-      `L ${w} ${r} ${w - r} ${h}`,
-      `L ${r} ${h} 0 ${r}`,
-      `L 0 ${r} ${r} 0`,
+      h > 2 * r ? `V ${h - r}` : "",
+      `L ${w - r} ${h}`,
+      `L ${r} ${h} 0 ${h - r}`,
+      h > 2 * r ? `V ${r}` : "",
+      `L ${r} 0`,
       "Z",
-    ]
+    ].filter(Boolean)
   }
 
   static pointedRect(w, h, props) {
@@ -122,30 +126,57 @@ export default class SVG {
   }
 
   static objectPath(w, h) {
-    const r = Math.min(16, h / 2, w / 4)
-    const cy = h / 2
-    const left = 0
-    const right = w
-    const tipDepth = Math.min(8, r / 2)
-    const tipHalfHeight = Math.min(4, r / 4)
+    const r = Math.min(h / 2, w / 2)
+    const left = 0.5
+    const right = w - 0.5
+    if (h > 48) {
+      const corner = Math.min(12, w / 4)
+      const inset = Math.min(6, corner / 2)
+      const halfTip = 5
+      const middle = h / 2
+      return [
+        `M ${left + corner} 0`,
+        `H ${right - corner}`,
+        `C ${right - inset} 0 ${right - inset} ${corner}`,
+        `${right - inset} ${middle - halfTip}`,
+        `C ${right - inset} ${middle - 2}`,
+        `${right} ${middle - 2}`,
+        `${right} ${middle}`,
+        `C ${right} ${middle + 2}`,
+        `${right - inset} ${middle + 2}`,
+        `${right - inset} ${middle + halfTip}`,
+        `V ${h - corner}`,
+        `C ${right - inset} ${h} ${right - corner} ${h}`,
+        `${right - corner} ${h}`,
+        `H ${left + corner}`,
+        `C ${left + inset} ${h} ${left + inset} ${h - corner}`,
+        `${left + inset} ${middle + halfTip}`,
+        `C ${left + inset} ${middle + 2}`,
+        `${left} ${middle + 2}`,
+        `${left} ${middle}`,
+        `C ${left} ${middle - 2}`,
+        `${left + inset} ${middle - 2}`,
+        `${left + inset} ${middle - halfTip}`,
+        `V ${corner}`,
+        `C ${left + inset} 0 ${left + corner} 0`,
+        `${left + corner} 0`,
+        "Z",
+      ]
+    }
     return [
       `M ${left + r} 0`,
       `H ${right - r}`,
       `C ${right - 0.4375 * r} ${0.125 * r}`,
-      `${right - 0.75 * r} ${cy - tipHalfHeight}`,
-      `${right - tipDepth} ${cy - tipHalfHeight}`,
-      `L ${right} ${cy}`,
-      `L ${right - tipDepth} ${cy + tipHalfHeight}`,
-      `C ${right - 0.75 * r} ${cy + tipHalfHeight}`,
-      `${right - 0.4375 * r} ${h - 0.125 * r}`,
-      `${right - r} ${h}`,
+      `${right - 0.75 * r} ${r}`,
+      `${right} ${r}`,
+      `C ${right - 0.75 * r} ${r}`,
+      `${right - 0.4375 * r} ${1.875 * r}`,
+      `${right - r} ${2 * r}`,
       `H ${left + r}`,
-      `C ${left + 0.4375 * r} ${h - 0.125 * r}`,
-      `${left + 0.75 * r} ${cy + tipHalfHeight}`,
-      `${left + tipDepth} ${cy + tipHalfHeight}`,
-      `L ${left} ${cy}`,
-      `L ${left + tipDepth} ${cy - tipHalfHeight}`,
-      `C ${left + 0.75 * r} ${cy - tipHalfHeight}`,
+      `C ${left + 0.4375 * r} ${1.875 * r}`,
+      `${left + 0.75 * r} ${r}`,
+      `${left} ${r}`,
+      `C ${left + 0.75 * r} ${r}`,
       `${left + 0.4375 * r} ${0.125 * r}`,
       `${left + r} 0`,
       "Z",
@@ -155,8 +186,7 @@ export default class SVG {
   static objectRect(w, h, props) {
     return SVG.path({
       ...props,
-      "stroke-linejoin": "miter",
-      "stroke-miterlimit": 20,
+      "stroke-linejoin": "round",
       path: SVG.objectPath(w, h),
     })
   }

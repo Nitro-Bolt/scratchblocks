@@ -285,7 +285,9 @@ function parseLines(code, languages) {
           break
         case "{":
           label = null
-          children.push(peek() === "}" ? pEmptyTypedInput("object") : pEmbedded())
+          children.push(
+            peek() === "}" ? pEmptyTypedInput("object") : pEmbedded(),
+          )
           break
         case " ":
         case "\t":

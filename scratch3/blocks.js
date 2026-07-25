@@ -462,8 +462,10 @@ class BlockView {
     const isCommand = this.isCommand
 
     const padding = BlockView.padding[this.info.shape] || BlockView.padding.null
-    const pt = padding[0],
-      pb = padding[1]
+    const visualOutputPadding =
+      !isCommand && children.some(child => child.isNewline) ? 4 : 0
+    const pt = padding[0] + visualOutputPadding,
+      pb = padding[1] + visualOutputPadding
 
     let y = this.info.shape === "cat" ? 16 : 0
     const Line = function (y) {
@@ -480,7 +482,7 @@ class BlockView {
       if (lines.length === 0) {
         line.height += pt + pb
       } else if (line.isVisualRow && isLast) {
-        line.height += pb
+        line.height += pb + 4
       } else if (!line.isVisualRow) {
         line.height -= 11
         line.y -= 2

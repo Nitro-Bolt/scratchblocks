@@ -83,7 +83,7 @@ Make sure this appears at the end of the page (just before the closing `</body>`
 ```js
 <script>
 scratchblocks.renderMatching('pre.blocks', {
-  style:     'scratch3',   // Optional, defaults to 'scratch2'.
+  style:     'scratch3',   // Optional; Scratch 3 is the only supported style.
   languages: ['en', 'de'], // Optional, defaults to ['en'].
   scale: 1,                // Optional, defaults to 1
 });
@@ -91,7 +91,8 @@ scratchblocks.renderMatching('pre.blocks', {
 ```
 The `renderMatching()` function takes a CSS-style selector for the elements that contain scratchblocks code: we use `pre.blocks` to target `pre` tags with the class `blocks`.
 
-The `style` option controls how the blocks appear, either the Scratch 2 or Scratch 3 style is supported.
+The `style` option controls how the blocks appear. `scratch3` and
+`scratch3-high-contrast` are supported.
 
 ### Inline blocks
 
@@ -196,7 +197,6 @@ Many, many thanks to the [contributors](https://github.com/scratchblocks/scratch
 * Authored by [tjvr](https://github.com/tjvr)
 * Maintained by tjvr and [apple502j](https://github.com/apple502j)
 * Icons derived from [Scratch Blocks](https://github.com/scratchfoundation/scratch-blocks) (Apache License 2.0)
-* Scratch 2 SVG proof-of-concept, shapes & filters by [as-com](https://github.com/as-com)
 * Anna helped with a formula, and pointed out that I can't read graphs
 * JSO designed the syntax and wrote the original [Block Plugin](https://en.scratch-wiki.info/wiki/Block_Plugin_\(1.4\))
 * Help with translation code from [joooni](https://scratch.mit.edu/users/joooni/)

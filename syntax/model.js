@@ -128,9 +128,9 @@ export class Input {
             ? "{}"
             : this.isArray
               ? "[]"
-          : this.isStack
-            ? "{}"
-            : text
+              : this.isStack
+                ? "{}"
+                : text
   }
 
   translate(_lang) {
@@ -171,9 +171,7 @@ export class Block {
     this.isCommand = shape === "stack" || shape === "cap" || /block/.test(shape)
     this.isOutline = shape === "outline"
     this.isReporter =
-      shape === "reporter" ||
-      shape === "object" ||
-      shape === "array"
+      shape === "reporter" || shape === "object" || shape === "array"
     this.isObject = shape === "object"
     this.isArray = shape === "array"
     this.isBoolean = shape === "boolean"
@@ -219,8 +217,7 @@ export class Block {
     }
 
     const isNitroShape =
-      this.info.shape === "object" ||
-      this.info.shape === "array"
+      this.info.shape === "object" || this.info.shape === "array"
     let overrides = extras || ""
     if (
       this.info.categoryIsDefault === false ||

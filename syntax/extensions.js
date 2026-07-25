@@ -6,7 +6,7 @@
     4) Add icon to scratch3/style.js
 */
 
-// Moved extensions: key is scratch3, value is scratch2
+// Moved extension aliases: key is current, value is legacy.
 export const movedExtensions = {
   pen: "pen",
   video: "sensing",
@@ -25,7 +25,7 @@ export const extensions = {
   gdxfor: "gdxfor",
 }
 
-// Alias extensions: unlike movedExtensions, this is handled for both scratch2 and scratch3.
+// Extension aliases accepted in addition to movedExtensions.
 // Key is alias, value is real extension name
 export const aliasExtensions = {
   wedo2: "wedo",

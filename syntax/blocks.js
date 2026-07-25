@@ -97,7 +97,7 @@ const allBlocks = scratchCommands.map(def => {
 
   const info = {
     id: def.id, // Used for Scratch 3 translations
-    spec: def.spec, // Used for Scratch 2 translations
+    spec: def.spec, // Used for legacy translations.
     parts: def.spec.split(splitPat).filter(x => x),
     selector: def.selector || `sb3:${def.id}`, // Used for JSON marshalling
     inputs: def.inputs == null ? [] : def.inputs,
@@ -165,7 +165,7 @@ function loadLanguage(code, language) {
     language.nativeAliases[blockId].push(alias)
   })
 
-  // Some English blocks were renamed between Scratch 2 and Scratch 3. Wire them
+  // Some English blocks have legacy names. Wire them
   // into language.blocksByHash
   Object.keys(language.renamedBlocks || {}).forEach(alt => {
     const id = language.renamedBlocks[alt]
