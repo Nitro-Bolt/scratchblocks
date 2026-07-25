@@ -126,8 +126,8 @@ export default class SVG {
     const cy = h / 2
     const left = 0
     const right = w
-    const tipDepth = Math.min(2, r / 4)
-    const tipHalfHeight = Math.min(1.5, r / 5)
+    const tipDepth = Math.min(4, r / 3)
+    const tipHalfHeight = Math.min(3, r / 4)
     return [
       `M ${left + r} 0`,
       `H ${right - r}`,

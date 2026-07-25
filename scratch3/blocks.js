@@ -94,10 +94,18 @@ export class IconView {
   }
 
   draw(iconStyle) {
-    return SVG.symbol(`#sb3-${iconName(this.name, iconStyle)}`, {
+    const symbol = SVG.symbol(`#sb3-${iconName(this.name, iconStyle)}`, {
       width: this.width,
       height: this.height,
     })
+    if (this.name === "addInput" || this.name === "delInput") {
+      const scaled = SVG.group([symbol])
+      SVG.setProps(scaled, {
+        transform: "scale(1.6)",
+      })
+      return SVG.group([scaled])
+    }
+    return symbol
   }
 
   static get icons() {
@@ -107,8 +115,8 @@ export class IconView {
       turnLeft: { width: 24, height: 24 },
       turnRight: { width: 24, height: 24 },
       loopArrow: { width: 24, height: 24 },
-      addInput: { width: 10, height: 13 },
-      delInput: { width: 10, height: 13 },
+      addInput: { width: 16, height: 21 },
+      delInput: { width: 16, height: 21 },
       list: { width: 15, height: 18 },
       musicBlock: { width: 40, height: 40 },
       penBlock: { width: 40, height: 40 },
@@ -207,7 +215,7 @@ export class InputView {
       w = this.label.width + 2 * px
       label = SVG.move(px, 9, label)
     } else {
-      w = this.isInset ? 30 : null
+      w = this.isObject || this.isArray ? 48 : this.isInset ? 30 : null
     }
     if (this.hasArrow) {
       w += 20
@@ -405,6 +413,9 @@ class BlockView {
   }
 
   horizontalPadding(child) {
+    if (this.isObject) {
+      return child.isLabel || child.isIcon ? 16 : 8
+    }
     if (this.isRound) {
       if (child.isIcon) {
         return 16
@@ -468,7 +479,7 @@ class BlockView {
     const pushLine = () => {
       if (lines.length === 0) {
         line.height += pt + pb
-      } else {
+      } else if (!line.isVisualRow) {
         line.height -= 11
         line.y -= 2
       }
@@ -506,6 +517,7 @@ class BlockView {
       if (child.isNewline) {
         pushLine()
         line = new Line(y)
+        line.isVisualRow = true
         previousChild = null
       } else if (child.isScript && this.hasScript) {
         this.hasScript = true
