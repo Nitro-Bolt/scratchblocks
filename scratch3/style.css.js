@@ -68,6 +68,9 @@ ${createRule("operators", name, style)}
 ${createRule("variables", name, style)}
 ${createRule("list", name, style)}
 ${createRule("custom", name, style)}
+${createRule("assets", name, style)}
+${createRule("table", name, style)}
+${createRule("json", name, style)}
 ${createRule("extension", name, style)}
 ${createRule("obsolete", name, style)}
 ${createRule("grey", name, style)}
@@ -142,6 +145,18 @@ const originalStyle = {
   customSecondary: "#ff4d6a",
   customTertiary: "#ff3355",
 
+  assetsPrimary: "#fcb103",
+  assetsSecondary: "#db9a37",
+  assetsTertiary: "#db8937",
+
+  tablePrimary: "#66bd5c",
+  tableSecondary: "#5caa53",
+  tableTertiary: "#52974a",
+
+  jsonPrimary: "#5755d4",
+  jsonSecondary: "#4644aa",
+  jsonTertiary: "#4644aa",
+
   extensionPrimary: "#0fbd8c",
   extensionSecondary: "#0da57a",
   extensionTertiary: "#0b8e69",
@@ -164,6 +179,16 @@ const highContrastStyle = {
   inputColorStroke: "#fff",
   inputFill: "#fff",
   literal: "#000",
+
+  assetsPrimary: "#ffd166",
+  assetsSecondary: "#ffe29a",
+  assetsTertiary: "#a96b00",
+  tablePrimary: "#99d591",
+  tableSecondary: "#b9e4b3",
+  tableTertiary: "#397234",
+  jsonPrimary: "#9998ea",
+  jsonSecondary: "#bbbaf2",
+  jsonTertiary: "#363493",
 
   motionPrimary: "#80b5ff",
   motionSecondary: "#b3d2ff",

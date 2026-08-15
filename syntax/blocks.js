@@ -8,12 +8,15 @@ const overrideCategories = [
   "sound",
   "variables",
   "list",
+  "table",
   "events",
   "control",
   "sensing",
   "operators",
   "custom",
   "custom-arg",
+  "assets",
+  "json",
   "extension",
   "grey",
   "obsolete",
@@ -237,6 +240,14 @@ export const english = {
     "10 ^",
   ],
 
+  assetMetadata: [
+    "name",
+    "extension",
+    "content type",
+    "last modified",
+    "md5"
+  ],
+
   // Language name is needed for the English locale as well
   name: "English",
 
@@ -293,6 +304,11 @@ disambig("OPERATORS_MATHOP", "SENSING_OF", (children, lang) => {
   }
   const name = first.value
   return lang.math.includes(name)
+})
+
+registerCheck("assets_metadata", (_, children, lang) => {
+  const first = children[0]
+  return first.isInput && lang.assetMetadata.includes(first.value)
 })
 
 disambig("SOUND_CHANGEEFFECTBY", "LOOKS_CHANGEEFFECTBY", (children, lang) => {

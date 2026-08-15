@@ -741,9 +741,28 @@ const listBlocks = {
   "hideList:": 0,
 }
 
+const tableBlocks = {
+  "sb3:data_addtotable": 1,
+  "sb3:data_insertdimensiontotable": 2,
+  "sb3:data_setcellintable": 2,
+  "sb3:data_deletecellintable": 2,
+  "sb3:data_deletedimensionintable": 2,
+  "sb3:data_deletealloftable": 0,
+  "sb3:data_itemincelloftable": 2,
+  "sb3:data_itemsofdimensionoftable": 2,
+  "sb3:data_lengthofdimensionoftable": 2,
+  "sb3:data_dimensioncountoftable": 1,
+  "sb3:data_tablecontainsitemincell": 0,
+  "sb3:data_tableasarray": 0,
+  "sb3:data_settableusingarray": 0,
+  "sb3:data_showtable": 0,
+  "sb3:data_hidetable": 0,
+}
+
 function recogniseStuff(scripts) {
   const customBlocksByHash = Object.create(null)
   const listNames = new Set()
+  const tableNames = new Set()
 
   scripts.forEach(script => {
     const customArgs = new Set()
@@ -821,6 +840,15 @@ function recogniseStuff(scripts) {
         if (input && input.isInput) {
           listNames.add(input.value)
         }
+      } else if (
+        Object.prototype.hasOwnProperty.call(tableBlocks, block.info.selector)
+      ) {
+        const argIndex = tableBlocks[block.info.selector]
+        const inputs = block.children.filter(child => !child.isLabel)
+        const input = inputs[argIndex]
+        if (input && input.isInput) {
+          tableNames.add(input.value)
+        }
       }
     })
   })
@@ -863,6 +891,10 @@ function recogniseStuff(scripts) {
         info.category = "list"
         info.categoryIsDefault = false
         info.selector = "contentsOfList:"
+      } else if (tableNames.has(name)) {
+        info.category = "table"
+        info.categoryIsDefault = false
+        info.selector = "sb3:data_tablecontents"
       }
 
       return // already done
